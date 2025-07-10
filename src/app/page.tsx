@@ -8,6 +8,8 @@ export default function Home() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
   const [mensagemErro, setMensagemErro] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
+  const [localizacao, setLocalizacao] = useState<string | null>(null)
+  const [erroLocalizacao, setErroLocalizacao] = useState<string | null>(null)
   const [favoritos, setFavoritos] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const favoritosSalvos = localStorage.getItem('favoritos')
@@ -60,11 +62,58 @@ export default function Home() {
     })
   }
 
+  useEffect(() => {
+    const obterLocalizacaoAutomatica = () => {
+      if ("geolocation" in navigator) {
+        setErroLocalizacao(null)
+        setLocalizacao("Obtendo sua localização...")
+
+        navigator.geolocation.getCurrentPosition(
+          async (position) => { 
+            const { latitude, longitude } = position.coords
+            setLocalizacao(`Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`)
+
+          },
+          (error) => {
+            let mensagemErro = ""
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                mensagemErro = "Permissão de geolocalização negada."
+                break
+              case error.POSITION_UNAVAILABLE:
+                mensagemErro = "Informação de localização indisponível."
+                break
+              case error.TIMEOUT:
+                mensagemErro = "Tempo limite excedido ao tentar obter a localização."
+                break
+              default:
+                mensagemErro = `Erro desconhecido ao obter localização`
+                break
+            }
+            setErroLocalizacao(mensagemErro)
+            setLocalizacao(null)
+          },
+          {
+            enableHighAccuracy: true, 
+            timeout: 5000,          
+            maximumAge: 0            
+          }
+        )
+      } else {
+        setLocalizacao(null)
+      }
+    }
+
+    obterLocalizacaoAutomatica()
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">       
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
           Lista de Usuários
+          {localizacao && <span className="block text-xl font-normal text-gray-600 mt-2">{localizacao}</span>}
+          {erroLocalizacao && <span className="block text-xl font-normal text-red-500 mt-2">{erroLocalizacao}</span>}
         </h1>
         {loading && (
           <p className="text-center text-lg text-blue-600">Carregando usuários...</p>
