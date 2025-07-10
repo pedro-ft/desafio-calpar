@@ -151,15 +151,15 @@ export default function Home() {
         )}
         {!loading && !mensagemErro && (
           <>
+            <ListaFavoritos
+              favoritos={favoritos}
+              onRemoveFavorite={toggleFavorito}
+            />
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Usuários Disponíveis</h2>
             <ListaUsuarios
               usuarios={usuarios}
               favoritos={favoritos}
               onToggleFavorite={toggleFavorito}
-            />
-            <ListaFavoritos
-              favoritos={favoritos}
-              onRemoveFavorite={toggleFavorito}
             />
           </>
         )}
