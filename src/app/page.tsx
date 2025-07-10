@@ -2,11 +2,19 @@
 import React, { useState, useEffect } from 'react'
 import { Usuario, RespostaAPI } from './components/types'
 import ListaUsuarios from './components/ListaUsuarios'
+import ListaFavoritos from './components/ListaFavoritos'
 
 export default function Home() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
   const [mensagemErro, setMensagemErro] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
+  const [favoritos, setFavoritos] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const favoritosSalvos = localStorage.getItem('favoritos')
+      return favoritosSalvos ? JSON.parse(favoritosSalvos) : []
+    }
+    return []
+  })
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -36,6 +44,22 @@ export default function Home() {
     fetchUsuarios()
   }, [])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('favoritos', JSON.stringify(favoritos))
+    }
+  }, [favoritos])
+
+  const toggleFavorito = (nomeUsuario: string) => {
+    setFavoritos(prevFavoritos => {
+      if (prevFavoritos.includes(nomeUsuario)) {
+        return prevFavoritos.filter(nome => nome !== nomeUsuario)
+      } else {
+        return [...prevFavoritos, nomeUsuario]
+      }
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -50,12 +74,16 @@ export default function Home() {
         )}
         {!loading && !mensagemErro && (
           <>
-
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Usuários Disponíveis</h2>
             <ListaUsuarios
               usuarios={usuarios}
+              favoritos={favoritos}
+              onToggleFavorite={toggleFavorito}
             />
-            
+            <ListaFavoritos
+              favoritos={favoritos}
+              onRemoveFavorite={toggleFavorito}
+            />
           </>
         )}
       </div>

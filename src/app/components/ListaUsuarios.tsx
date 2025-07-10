@@ -1,14 +1,17 @@
+'use client'
 import React from 'react'
 import { Usuario } from './types'
-
 interface UsuariosLista {
   usuarios: Usuario[]
+  favoritos: string[]
+  onToggleFavorite: (nomeUsuario: string) => void
 }
 
-export default function UserList({ usuarios }: UsuariosLista) {
+export default function ListaUsuarios({ usuarios, favoritos, onToggleFavorite }: UsuariosLista) {
   if (usuarios.length === 0) {
     return <p className="text-gray-600">Nenhum usuário encontrado na API.</p>
   }
+
   return (
     <ul className="space-y-3">
       {usuarios.map((usuario) => (
@@ -19,6 +22,14 @@ export default function UserList({ usuarios }: UsuariosLista) {
               {usuario.Disponivel ? 'Disponível' : 'Indisponível'}
             </span>
           </span>
+          <button
+            onClick={() => onToggleFavorite(usuario.Nome)}
+            className={`px-4 py-2 rounded-md text-white font-semibold transition duration-200 ease-in-out
+              ${favoritos.includes(usuario.Nome) ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-500 hover:bg-blue-600'}
+            `}
+          >
+            {favoritos.includes(usuario.Nome) ? '★ Favorito' : '☆ Adicionar aos Favoritos'}
+          </button>
         </li>
       ))}
     </ul>
