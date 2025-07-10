@@ -71,7 +71,7 @@ export default function Home() {
         navigator.geolocation.getCurrentPosition(
           async (position) => { 
             const { latitude, longitude } = position.coords
-            setLocalizacao(`Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`)
+            await buscarNomeCidade(latitude, longitude);
 
           },
           (error) => {
@@ -106,6 +106,34 @@ export default function Home() {
 
     obterLocalizacaoAutomatica()
   }, [])
+
+    const buscarNomeCidade = async (latitude: number, longitude: number) => {
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'DesafioCalparApp/1.0 (seu_nome@exemplo.com)' // Mude 'seu_nome@exemplo.com' para algo relevante
+        }
+      })
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar nome da cidade.`)
+      }
+
+      const data = await response.json()
+
+      if (data && data.address) {
+        const cidade = data.address.city || data.address.town || data.address.village || data.address.county || data.address.state || 'Cidade desconhecida'
+        const pais = data.address.country || ''
+
+        setLocalizacao(`${cidade}${pais ? `, ${pais}` : ''}`)
+      } else {
+        setLocalizacao(`Cidade não encontrada (Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)})`)
+      }
+    } catch (error: any) {
+      console.error(error.message)
+      setLocalizacao(null)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
