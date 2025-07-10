@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Usuario, RespostaAPI } from './components/types'
 import ListaUsuarios from './components/ListaUsuarios'
 import ListaFavoritos from './components/ListaFavoritos'
+import BarraPesquisa from './components/BarraPesquisa'
 
 export default function Home() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
@@ -10,6 +11,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true)
   const [localizacao, setLocalizacao] = useState<string | null>(null)
   const [erroLocalizacao, setErroLocalizacao] = useState<string | null>(null)
+  const [termoBusca, setTermoBusca] = useState<string>('')
   const [favoritos, setFavoritos] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const favoritosSalvos = localStorage.getItem('favoritos')
@@ -112,7 +114,7 @@ export default function Home() {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'DesafioCalparApp/1.0 (seu_nome@exemplo.com)' // Mude 'seu_nome@exemplo.com' para algo relevante
+          'User-Agent': 'DesafioCalparApp/1.0 (pedroTaborda)'
         }
       })
       if (!response.ok) {
@@ -135,6 +137,10 @@ export default function Home() {
     }
   }
 
+  const usuariosFiltrados = usuarios.filter(usuario =>
+    usuario.Nome.toLowerCase().includes(termoBusca.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">       
@@ -151,13 +157,17 @@ export default function Home() {
         )}
         {!loading && !mensagemErro && (
           <>
+            <BarraPesquisa
+              termoBusca={termoBusca}
+              onSearchChange={setTermoBusca}
+            />
             <ListaFavoritos
               favoritos={favoritos}
               onRemoveFavorite={toggleFavorito}
             />
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Usuários Disponíveis</h2>
             <ListaUsuarios
-              usuarios={usuarios}
+              usuarios={usuariosFiltrados}
               favoritos={favoritos}
               onToggleFavorite={toggleFavorito}
             />
