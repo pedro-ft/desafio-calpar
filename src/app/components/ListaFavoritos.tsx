@@ -13,17 +13,17 @@ export default function ListaFavoritos({ favoritos, onRemoveFavorite }: Favorito
 
   return (
     <>
-      <h2 className="text-2xl font-semibold text-gray-700 mt-8 mb-4">Favoritos</h2>
-      <ul className="space-y-3">
+      <ul className="space-y-0">
         {favoritos
           .slice()
           .sort((a, b) => a.localeCompare(b))  
           .map((nomeFav) => (
-            <li key={nomeFav} className="flex items-center justify-between bg-gray-50 p-3 rounded-md shadow-sm">
-              <span className="text-lg text-gray-800">{nomeFav}</span>
+            <li key={nomeFav} className="flex items-center justify-between py-2 px-1 border-b border-border-color last:border-b-0 transition-colors duration-200 hover:bg-gray-700/30">
+              <span className="text-text-primary text-base font-medium">{nomeFav}</span>
               <button
                 onClick={() => onRemoveFavorite(nomeFav)}
-                className="px-4 py-2 rounded-md bg-red-500 text-white font-semibold hover:bg-red-600 transition duration-200 ease-in-out"
+                className="p-2 rounded-full text-red-500 hover:text-red-400 transition duration-200 ease-in-out"
+                aria-label={`Remover ${nomeFav} dos favoritos`}
               >
                 Remover
               </button>

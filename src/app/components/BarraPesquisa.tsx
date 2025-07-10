@@ -12,7 +12,7 @@ export default function BarraPesquisa({ termoBusca, onSearchChange }: Pesquisa) 
       <input
         type="text"
         placeholder="Buscar usuário"
-        className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full p-2.5 bg-background border border-border-color rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-text-primary placeholder-text-secondary"
         value={termoBusca}
         onChange={(e) => onSearchChange(e.target.value)}
       />

@@ -142,38 +142,67 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">       
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Lista de Usuários
-          {localizacao && <span className="block text-xl font-normal text-gray-600 mt-2">{localizacao}</span>}
-          {erroLocalizacao && <span className="block text-xl font-normal text-red-500 mt-2">{erroLocalizacao}</span>}
-        </h1>
-        {loading && (
-          <p className="text-center text-lg text-blue-600">Carregando usuários...</p>
-        )}
-        {mensagemErro && (
-          <p className="text-center text-lg text-red-500 font-semibold">{mensagemErro}</p>
-        )}
-        {!loading && !mensagemErro && (
-          <>
-            <BarraPesquisa
-              termoBusca={termoBusca}
-              onSearchChange={setTermoBusca}
-            />
-            <ListaFavoritos
-              favoritos={favoritos}
-              onRemoveFavorite={toggleFavorito}
-            />
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Usuários Disponíveis</h2>
-            <ListaUsuarios
-              usuarios={usuariosFiltrados}
-              favoritos={favoritos}
-              onToggleFavorite={toggleFavorito}
-            />
-          </>
-        )}
+    <div className="min-h-screen bg-background text-text-primary p-4 sm:p-8">
+      <div className="max-w-md mx-auto bg-card-background rounded-xl shadow-lg overflow-hidden md:max-w-xl lg:max-w-2xl">
+        <div className="p-4 sm:p-6 bg-background border-b border-border-color">
+          <h1 className="text-xl font-bold text-text-primary mb-2"> 
+            Lista de Usuários - Calpar
+            <span className="block text-sm font-normal text-text-secondary mt-1">
+              {localizacao && <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-icon-color inline-block" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                {localizacao}
+              </span>}
+              {erroLocalizacao && <span className="text-red-500">{erroLocalizacao}</span>}
+              {!localizacao && !erroLocalizacao && !loading && (
+                 <span className="text-text-secondary">Aguardando localização...</span>
+              )}
+            </span>
+          </h1>
+        </div>
+        <div className="p-4 sm:p-6">
+          {loading && (
+            <p className="text-center text-lg text-text-secondary">Carregando usuários...</p>
+          )}
+
+          {mensagemErro && (
+            <p className="text-center text-lg text-red-500 font-semibold">{mensagemErro}</p>
+          )}
+
+          {!loading && !mensagemErro && (
+            <>
+              <BarraPesquisa
+                termoBusca={termoBusca}
+                onSearchChange={setTermoBusca}
+              />
+              {favoritos.length > 0 && (
+                <div className="mb-6">
+                  <h2 className="text-base font-medium text-text-secondary mb-2 uppercase tracking-wider">
+                    <span className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-yellow-400 inline-block" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.72a1 1 0 01.588-1.81h3.462a1 1 0 00.95-.69L9.049 2.927z" />
+                      </svg>
+                      Favoritos
+                    </span>
+                  </h2>
+                  <ListaFavoritos
+                    favoritos={favoritos}
+                    onRemoveFavorite={toggleFavorito}
+                  />
+                </div>
+              )}
+              <hr className="my-6 border-border-color" />
+              <h2 className="text-base font-medium text-text-secondary mb-2 uppercase tracking-wider">Usuários Disponíveis</h2>
+              <ListaUsuarios
+                usuarios={usuariosFiltrados}
+                favoritos={favoritos}
+                onToggleFavorite={toggleFavorito}
+              />
+            </>
+          )}
+        </div>
       </div>
     </div>
-  )
+  );
 }

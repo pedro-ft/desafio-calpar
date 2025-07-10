@@ -13,22 +13,22 @@ export default function ListaUsuarios({ usuarios, favoritos, onToggleFavorite }:
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-0">
       {usuarios
         .slice()
         .sort((a, b) => a.Nome.localeCompare(b.Nome))      
         .map((usuario) => (
-          <li key={usuario.Nome} className="flex items-center justify-between bg-gray-50 p-3 rounded-md shadow-sm">
-            <span className="text-lg text-gray-800">
+          <li key={usuario.Nome} className="flex items-center justify-between py-2 px-1 border-b border-border-color last:border-b-0 transition-colors duration-200 hover:bg-gray-700/30">
+            <span className="text-text-primary text-base font-medium block">
               {usuario.Nome} - {' '}
-              <span className={`font-medium ${usuario.Disponivel ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`text-sm font-normal ${usuario.Disponivel ? 'text-green-500' : 'text-red-500'}`}>
                 {usuario.Disponivel ? 'Disponível' : 'Indisponível'}
               </span>
             </span>
             <button
               onClick={() => onToggleFavorite(usuario.Nome)}
-              className={`px-4 py-2 rounded-md text-white font-semibold transition duration-200 ease-in-out
-                ${favoritos.includes(usuario.Nome) ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-500 hover:bg-blue-600'}
+              className={`p-2 rounded-full transition duration-200 ease-in-out
+                ${favoritos.includes(usuario.Nome) ? 'text-yellow-400 hover:text-yellow-300' : 'text-text-secondary hover:text-text-primary'}
               `}
             >
               {favoritos.includes(usuario.Nome) ? '★ Favorito' : '☆ Adicionar aos Favoritos'}
