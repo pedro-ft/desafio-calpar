@@ -99,8 +99,8 @@ Você pode rodar o projeto utilizando Docker.
 
 ### Pré-requisitos
 
--   **Git:** Para clonar o repositório
--   **Docker Desktop:** (Recomendado para a abordagem com Docker)
+-   **Git**
+-   **Docker Desktop**
 
 ### Rodar com Docker
 
