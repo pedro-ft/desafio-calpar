@@ -131,10 +131,10 @@ export default function Home() {
 
         setLocalizacao(`${cidade}${pais ? `, ${pais}` : ''}`)
       } else {
-        setLocalizacao(`Cidade não encontrada (Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)})`)
+        setLocalizacao(`Cidade não encontrada`)
       }
-    } catch (error: any) {
-      console.error(error.message)
+    } catch (error: unknown) {
+      console.error("Erro na geocodificação reversa:", error)
       setErroLocalizacao(`Não foi possível obter a cidade.`);
     }
   }
