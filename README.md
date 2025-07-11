@@ -95,12 +95,32 @@ A organização do projeto segue as melhores práticas do Next.js:
 
 ## Como Rodar o Projeto
 
-Você pode rodar o projeto utilizando Docker. 
+Você pode rodar o projeto utilizando Docker ou localmente. 
 
 ### Pré-requisitos
 
--   **Git**
--   **Docker Desktop**
+-   **Node.js:** Versão LTS (v20.x ou superior)
+-   **npm:** Última versão
+-   **Git:** Para clonar o repositório.
+-   **Docker Desktop:** Essencial para a abordagem com Docker.
+
+### Rodar Localmente (Sem Docker)
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/pedro-ft/desafio-calpar.git
+    cd desafio-calpar
+    ```
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+3.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+4.  **Acesse a aplicação:**
+    Abra seu navegador e navegue para `http://localhost:3000`.
 
 ### Rodar com Docker
 
