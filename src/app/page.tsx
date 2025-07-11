@@ -4,6 +4,8 @@ import { Usuario, RespostaAPI } from './components/types'
 import ListaUsuarios from './components/ListaUsuarios'
 import ListaFavoritos from './components/ListaFavoritos'
 import BarraPesquisa from './components/BarraPesquisa'
+import { useTema } from './components/MudarTema'
+import Image from 'next/image'
 
 export default function Home() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
@@ -73,7 +75,7 @@ export default function Home() {
         navigator.geolocation.getCurrentPosition(
           async (position) => { 
             const { latitude, longitude } = position.coords
-            await buscarNomeCidade(latitude, longitude);
+            await buscarNomeCidade(latitude, longitude)
 
           },
           (error) => {
@@ -109,12 +111,12 @@ export default function Home() {
     obterLocalizacaoAutomatica()
   }, [])
 
-    const buscarNomeCidade = async (latitude: number, longitude: number) => {
+  const buscarNomeCidade = async (latitude: number, longitude: number) => {
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'DesafioCalparApp/1.0 (pedroTaborda)'
+          'User-Agent': 'DesafioCalparApp/1.0 (pedrofetaborda@gmail.com)'
         }
       })
       if (!response.ok) {
@@ -133,33 +135,65 @@ export default function Home() {
       }
     } catch (error: any) {
       console.error(error.message)
-      setLocalizacao(null)
+      setErroLocalizacao(`Não foi possível obter a cidade.`);
     }
   }
 
   const usuariosFiltrados = usuarios.filter(usuario =>
     usuario.Nome.toLowerCase().includes(termoBusca.toLowerCase())
-  );
+  )
+
+  const { theme, toggleTheme } = useTema()
 
   return (
     <div className="min-h-screen bg-background text-text-primary p-4 sm:p-8">
       <div className="max-w-md mx-auto bg-card-background rounded-xl shadow-lg overflow-hidden md:max-w-xl lg:max-w-2xl">
         <div className="p-4 sm:p-6 bg-background border-b border-border-color">
-          <h1 className="text-xl font-bold text-text-primary mb-2"> 
-            Lista de Usuários - Calpar
-            <span className="block text-sm font-normal text-text-secondary mt-1">
-              {localizacao && <span className="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-icon-color inline-block" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                {localizacao}
-              </span>}
-              {erroLocalizacao && <span className="text-red-500">{erroLocalizacao}</span>}
-              {!localizacao && !erroLocalizacao && !loading && (
-                 <span className="text-text-secondary">Aguardando localização...</span>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <Image
+                src="/Logotipo Grupo Calpar 2.avif"
+                alt="Logo Calpar"
+                width={48}
+                height={48}
+                className='mr-3'
+              />    
+              <h1 className="text-xl font-bold text-text-primary"> 
+                Lista de Usuários
+                <span className="block text-sm font-normal text-text-secondary mt-1">
+                  {localizacao && !erroLocalizacao && <span className="flex items-center">
+                    {localizacao}
+                  </span>}
+                  {erroLocalizacao && <span className="text-red-500">{erroLocalizacao}</span>}
+                  {!localizacao && !erroLocalizacao && (
+                    <span className="text-text-secondary">Aguardando localização...</span>
+                  )}
+                </span>
+              </h1>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full focus:outline-none focus:ring-2 transition-colors duration-300
+                bg-gray-200 dark:bg-gray-800 text-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
+              aria-label={`Mudar para modo ${theme === 'light' ? 'escuro' : 'claro'}`}
+            >
+              {theme === 'light' ? (
+                <Image
+                  src="/sol.svg"
+                  alt="Ícone Sol"
+                  width={32} 
+                  height={32} 
+                />
+              ) : (
+                <Image
+                  src="/lua.svg"
+                  alt="Ícone Lua"
+                  width={32}
+                  height={32} 
+                />
               )}
-            </span>
-          </h1>
+            </button>
+          </div>
         </div>
         <div className="p-4 sm:p-6">
           {loading && (
@@ -180,9 +214,6 @@ export default function Home() {
                 <div className="mb-6">
                   <h2 className="text-base font-medium text-text-secondary mb-2 uppercase tracking-wider">
                     <span className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-yellow-400 inline-block" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.72a1 1 0 01.588-1.81h3.462a1 1 0 00.95-.69L9.049 2.927z" />
-                      </svg>
                       Favoritos
                     </span>
                   </h2>
@@ -204,5 +235,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }

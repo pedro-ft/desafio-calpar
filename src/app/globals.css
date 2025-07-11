@@ -9,15 +9,14 @@
   --icon-color: #333333;  
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+html.dark {
     --background: #121212;    
     --card-background: #1e1e1e;   
     --text-primary: #e0e0e0;     
     --text-secondary: #a0a0a0;   
     --border-color: #333333;      
     --icon-color: #cccccc;       
-  }
+  
 }
 
 body {
