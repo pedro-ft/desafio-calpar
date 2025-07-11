@@ -62,10 +62,10 @@ A aplicação oferece as seguintes funcionalidades:
 ## Screenshots do Projeto
 
 ### Modo Claro
-![Modo Claro](screenshots/modo-claro.png)
+![Modo Claro](screenshots/Modo-claro.png)
 
 ### Modo Escuro
-![Modo Claro](screenshots/modo-escuro.png)
+![Modo Claro](screenshots/Modo-escuro.png)
 
 ## Estrutura do Projeto
 
